@@ -23,7 +23,11 @@
   min-height: 100px;
   background-color: #fff;
   border-top-left-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: -107px -103px 41px 0px rgba(0, 0, 0, 0.00),
+              -68px -66px 38px 0px rgba(0, 0, 0, 0.00),
+              -38px -37px 32px 0px rgba(0, 0, 0, 0.01),
+              -17px -16px 24px 0px rgba(0, 0, 0, 0.02),
+              -4px -4px 13px 0px rgba(0, 0, 0, 0.02);
   transition: width 0.3s ease, height 0.3s ease;
   pointer-events: auto;
 }
