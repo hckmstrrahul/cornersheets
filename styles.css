@@ -1,0 +1,63 @@
+.corner-sheet-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: auto;
+}
+
+.corner-sheet {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10%;
+  height: 20%;
+  min-width: 200px;
+  min-height: 100px;
+  background-color: #fff;
+  border-top-left-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease, height 0.3s ease;
+  pointer-events: auto;
+}
+
+.drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #ddd;
+  border-top-left-radius: 12px;
+  cursor: nwse-resize;
+}
+
+.corner-sheet::before,
+.corner-sheet::after {
+  content: '';
+  position: absolute;
+  background-color: #ddd;
+}
+
+.corner-sheet::before {
+  top: 0;
+  left: 20px;
+  right: 0;
+  height: 10px;
+  cursor: ns-resize;
+}
+
+.corner-sheet::after {
+  top: 20px;
+  left: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize;
+}
