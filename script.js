@@ -67,7 +67,7 @@ class CornerSheet {
     if (this.isBottomSheetResizing) {
       let newHeight = Math.max(this.minHeight, Math.min(this.startHeight + deltaY, window.innerHeight));
       this.sheet.style.height = `${newHeight}px`;
-      this.updateScrimOpacity(window.innerWidth, newHeight);
+      this.updateScrimOpacity();
     } else {
       let newWidth = Math.max(this.minWidth, Math.min(this.startWidth + deltaX, window.innerWidth));
       let newHeight = Math.max(this.minHeight, Math.min(this.startHeight + deltaY, window.innerHeight));
@@ -83,7 +83,7 @@ class CornerSheet {
         this.sheet.style.bottom = '0';
         this.sheet.style.left = 'auto';
         this.sheet.style.top = 'auto';
-        this.updateScrimOpacity(newWidth, newHeight);
+        this.updateScrimOpacity();
       }
     }
   }
@@ -92,11 +92,19 @@ class CornerSheet {
     this.isDragging = false;
   }
 
-  updateScrimOpacity(width, height) {
-    const widthRatio = (width - this.minWidth) / (this.maxWidth - this.minWidth);
-    const heightRatio = (height - this.minHeight) / (this.maxHeight - this.minHeight);
-    const opacity = Math.max(widthRatio, heightRatio) * 0.8;
-    this.scrim.style.opacity = opacity;
+  updateScrimOpacity() {
+    const rect = this.sheet.getBoundingClientRect();
+    const sheetWidth = rect.width;
+    const sheetHeight = rect.height;
+
+    const widthRatio = (sheetWidth - this.minWidth) / (this.maxWidth - this.minWidth);
+    const heightRatio = (sheetHeight - this.minHeight) / (this.maxHeight - this.minHeight);
+
+    const opacityRatio = Math.max(widthRatio, heightRatio);
+    const opacity = 0.01 + opacityRatio * 0.79; // 0.01 (1%) to 0.8 (80%)
+
+    this.scrim.style.opacity = opacity.toFixed(2);
+    this.scrim.style.pointerEvents = opacityRatio > 0 ? 'auto' : 'none';
   }
 
   snapToLeftEdge() {
@@ -104,7 +112,7 @@ class CornerSheet {
     this.sheet.style.height = `${this.sheet.offsetHeight}px`;
     this.sheet.style.left = '0';
     this.sheet.style.right = 'auto';
-    this.updateScrimOpacity(window.innerWidth, this.sheet.offsetHeight);
+    this.updateScrimOpacity();
   }
 
   transitionToCornerSheet(e) {
@@ -112,7 +120,7 @@ class CornerSheet {
     this.sheet.style.width = `${newWidth}px`;
     this.sheet.style.left = 'auto';
     this.sheet.style.right = '0';
-    this.updateScrimOpacity(newWidth, this.sheet.offsetHeight);
+    this.updateScrimOpacity();
   }
 
   open() {
@@ -121,7 +129,7 @@ class CornerSheet {
     this.sheet.style.right = '0';
     this.sheet.style.left = 'auto';
     this.container.style.display = 'block';
-    this.updateScrimOpacity(this.minWidth, this.minHeight);
+    this.updateScrimOpacity();
   }
 
   closeSheet() {
@@ -129,7 +137,7 @@ class CornerSheet {
     this.sheet.style.width = `${this.minWidth}px`;
     this.sheet.style.height = `${this.minHeight}px`;
     this.resetPosition();
-    this.updateScrimOpacity(this.minWidth, this.minHeight);
+    this.updateScrimOpacity();
   }
 }
 
