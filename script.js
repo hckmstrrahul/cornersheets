@@ -47,10 +47,10 @@ class CornerSheet {
 
       // Check if the sheet is snapped to the left edge
       if (this.sheet.style.left === '0px') {
-        if (e.offsetX <= 10) {
-          // Transition back to cornersheet
-          this.transitionToCornerSheet(e);
-        } else {
+        if (e.offsetX <= 10 && e.offsetY <= 10) {
+          // Allow transitioning back to cornersheet
+          this.isTransitioningToCorner = true;
+        } else if (e.offsetY <= 10) {
           // Allow vertical resizing for bottomsheet
           this.isBottomSheetResizing = true;
         }
@@ -68,6 +68,16 @@ class CornerSheet {
       let newHeight = Math.max(this.minHeight, Math.min(this.startHeight + deltaY, window.innerHeight));
       this.sheet.style.height = `${newHeight}px`;
       this.updateScrimOpacity();
+    } else if (this.isTransitioningToCorner) {
+      let newWidth = Math.max(this.minWidth, window.innerWidth - e.clientX);
+      this.sheet.style.width = `${newWidth}px`;
+      this.sheet.style.left = 'auto';
+      this.sheet.style.right = '0';
+      this.updateScrimOpacity();
+      
+      if (newWidth > this.minWidth) {
+        this.isTransitioningToCorner = false;
+      }
     } else {
       let newWidth = Math.max(this.minWidth, Math.min(this.startWidth + deltaX, window.innerWidth));
       let newHeight = Math.max(this.minHeight, Math.min(this.startHeight + deltaY, window.innerHeight));
@@ -90,6 +100,8 @@ class CornerSheet {
 
   stopDragging() {
     this.isDragging = false;
+    this.isBottomSheetResizing = false;
+    this.isTransitioningToCorner = false;
   }
 
   updateScrimOpacity() {
