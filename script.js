@@ -97,10 +97,10 @@ class CornerSheet {
     const sheetWidth = rect.width;
     const sheetHeight = rect.height;
 
-    const widthRatio = (sheetWidth - this.minWidth) / (this.maxWidth - this.minWidth);
-    const heightRatio = (sheetHeight - this.minHeight) / (this.maxHeight - this.minHeight);
+    const widthRatio = Math.min((sheetWidth - this.minWidth) / (this.maxWidth - this.minWidth), 1);
+    const heightRatio = Math.min((sheetHeight - this.minHeight) / (this.maxHeight - this.minHeight), 1);
 
-    const opacityRatio = Math.max(widthRatio, heightRatio);
+    const opacityRatio = (widthRatio + heightRatio) / 2;
     const opacity = 0.01 + opacityRatio * 0.79; // 0.01 (1%) to 0.8 (80%)
 
     this.scrim.style.opacity = opacity.toFixed(2);
